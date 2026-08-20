@@ -696,6 +696,191 @@
     font-size: 0.825rem;
     text-align: center;
   }
+
+  /* Keyboard accessibility */
+  a:focus-visible,
+  button:focus-visible {
+    outline: 2px solid var(--accent-gold);
+    outline-offset: 3px;
+    border-radius: 8px;
+  }
+
+  /* Cursor-tracked spotlight — a soft glow that follows the pointer
+     across the featured card and each team card. */
+  .featured-card,
+  .team-card {
+    --spot-x: 50%;
+    --spot-y: 50%;
+  }
+
+  .featured-card::after,
+  .team-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(280px circle at var(--spot-x) var(--spot-y), rgba(243, 168, 82, 0.18), transparent 70%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+  }
+
+  .featured-card:hover::after,
+  .team-card:hover::after {
+    opacity: 1;
+  }
+
+  @media (hover: none) {
+    .featured-card::after,
+    .team-card::after {
+      display: none;
+    }
+  }
+
+  /* Staggered entrance for the team cards */
+  .team-card {
+    animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  }
+
+  .team-grid .team-card:nth-child(1) { animation-delay: 0.35s; }
+  .team-grid .team-card:nth-child(2) { animation-delay: 0.45s; }
+  .team-grid .team-card:nth-child(3) { animation-delay: 0.55s; }
+  .team-grid .team-card:nth-child(4) { animation-delay: 0.65s; }
+  .team-grid .team-card:nth-child(5) { animation-delay: 0.75s; }
+
+  /* Floating "Get in Touch" widget */
+  .contact-fab {
+    position: fixed;
+    left: 22px;
+    bottom: 22px;
+    z-index: 20;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    gap: 0.7rem;
+  }
+
+  .contact-fab-btn {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(135deg, #f3a852, #e8637c);
+    color: #0f0a0a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 22px rgba(243, 168, 82, 0.35);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+  }
+
+  .contact-fab-btn:hover {
+    transform: translateY(-2px) scale(1.06);
+    box-shadow: 0 12px 28px rgba(243, 168, 82, 0.5);
+  }
+
+  .contact-fab-btn svg {
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .contact-fab.open .contact-fab-btn svg {
+    transform: rotate(135deg);
+  }
+
+  .contact-options {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .contact-option {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-main);
+    text-decoration: none;
+    position: relative;
+    opacity: 0;
+    transform: translateY(10px) scale(0.7);
+    pointer-events: none;
+    box-shadow: 0 6px 16px var(--shadow-soft);
+    transition: opacity 0.25s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+      background-color 0.3s ease, border-color 0.3s ease, color 0.25s ease;
+  }
+
+  .contact-fab.open .contact-option {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+  }
+
+  .contact-fab.open .contact-options > .contact-option:nth-child(1) { transition-delay: 0.09s; }
+  .contact-fab.open .contact-options > .contact-option:nth-child(2) { transition-delay: 0.02s; }
+
+  .contact-option:hover {
+    transform: translateY(-3px) scale(1.06);
+  }
+
+  .contact-option.contact-email:hover {
+    color: var(--accent-gold);
+    border-color: rgba(243, 168, 82, 0.4);
+  }
+
+  .contact-option.contact-linkedin:hover {
+    color: var(--linkedin-text);
+    background: var(--linkedin-glow);
+    border-color: var(--linkedin-border);
+  }
+
+  .contact-tooltip {
+    position: absolute;
+    left: calc(100% + 10px);
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(15, 10, 10, 0.92);
+    color: #f7edeb;
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 0.35rem 0.65rem;
+    border-radius: 8px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+  }
+
+  .contact-option:hover .contact-tooltip {
+    opacity: 1;
+  }
+
+  @media (max-width: 640px) {
+    .contact-fab {
+      left: 14px;
+      bottom: 14px;
+      gap: 0.5rem;
+    }
+
+    .contact-fab-btn {
+      width: 46px;
+      height: 46px;
+    }
+
+    .contact-option {
+      width: 40px;
+      height: 40px;
+    }
+
+    .contact-tooltip {
+      display: none;
+    }
+  }
 </style>
 </head>
 <body>
@@ -737,7 +922,7 @@
         <div class="featured-desc">Cake in a can &amp; espresso shots storefront. Experience the official full live application.</div>
       </div>
       <!-- Layrd Live URL -->
-      <a href="https://frontend.happymoss-98fba6cb.canadacentral.azurecontainerapps.io" target="_blank" rel="noopener" class="btn btn-primary">
+      <a href="https://layrd-capstone-secure-fqcbcjbtd8fkd9ez.z03.azurefd.net" target="_blank" rel="noopener" class="btn btn-primary">
         Launch App
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
       </a>
@@ -804,6 +989,23 @@
 
   </div>
 
+  <!-- Floating Contact Widget -->
+  <div class="contact-fab" id="contactFab">
+    <button class="contact-fab-btn" id="contactFabBtn" aria-haspopup="true" aria-expanded="false" aria-label="Get in touch">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+    </button>
+    <div class="contact-options" role="menu">
+      <a class="contact-option contact-linkedin" role="menuitem" href="https://www.linkedin.com/in/riteshpatel1704" target="_blank" rel="noopener" aria-label="Connect on LinkedIn">
+        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
+        <span class="contact-tooltip">Connect on LinkedIn</span>
+      </a>
+      <a class="contact-option contact-email" role="menuitem" href="mailto:patelriteshkumarh@gmail.com" aria-label="Send an email">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z" opacity="0"></path><path d="M22 6c0-1.1-.9-2-2-2H4a2 2 0 0 0-2 2v12c0 1.1.9 2 2 2h16a2 2 0 0 0 2-2V6z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+        <span class="contact-tooltip">Drop an email</span>
+      </a>
+    </div>
+  </div>
+
 <script>
   const root = document.documentElement;
   const toggle = document.getElementById('themeToggle');
@@ -838,6 +1040,39 @@
       index = next;
     }, holdTime);
   })();
+
+  // Cursor-tracked spotlight on the featured card and each team card
+  document.querySelectorAll('.featured-card, .team-card').forEach((card) => {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      card.style.setProperty('--spot-x', `${e.clientX - rect.left}px`);
+      card.style.setProperty('--spot-y', `${e.clientY - rect.top}px`);
+    });
+  });
+
+  // Floating contact widget: click to open/close, close on outside
+  // click or Escape, and keep aria-expanded in sync for screen readers.
+  const contactFab = document.getElementById('contactFab');
+  const contactFabBtn = document.getElementById('contactFabBtn');
+
+  function setFabOpen(open) {
+    contactFab.classList.toggle('open', open);
+    contactFabBtn.setAttribute('aria-expanded', String(open));
+  }
+
+  contactFabBtn.addEventListener('click', () => {
+    setFabOpen(!contactFab.classList.contains('open'));
+  });
+
+  document.addEventListener('click', (e) => {
+    if (contactFab.classList.contains('open') && !contactFab.contains(e.target)) {
+      setFabOpen(false);
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') setFabOpen(false);
+  });
 </script>
 
 </body>
